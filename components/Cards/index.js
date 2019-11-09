@@ -17,3 +17,61 @@
 // </div>
 //
 // Create a card for each of the articles and add the card to the DOM.
+
+function createArticle(source) {
+    const article = document.createElement('div');
+    const headline = document.createElement('div');
+    const author = document.createElement('div');
+    const imgContainer = document.createElement('div');
+    const img = document.createElement('img');
+    const name = document.createElement('span');
+
+    article.classList.add("card");
+    headline.classList.add("headline");
+    author.classList.add("author");
+    imgContainer.classList.add("img-container");
+
+    headline.textContent = source.headline;
+    img.src = source.authorPhoto;
+    name.textContent = source.authorName;
+
+    article.appendChild(headline);
+    article.appendChild(author);
+    author.appendChild(imgContainer);
+    imgContainer.appendChild(img);
+    author.appendChild(name);
+
+    return article;
+}
+
+const cardsContainer = document.querySelector('.cards-container');
+
+const getRequest = axios.get('https://lambda-times-backend.herokuapp.com/articles')
+.then(response => {
+    const javascript = response.data.articles.javascript;
+    const bootstrap = response.data.articles.bootstrap;
+    const technology = response.data.articles.technology;
+    const jquery = response.data.articles.jquery;
+    const node = response.data.articles.node;
+
+    javascript.forEach(data => {
+        cardsContainer.appendChild(createArticle(data));
+    })
+
+    bootstrap.forEach(data => {
+        cardsContainer.appendChild(createArticle(data));
+    })
+    technology.forEach(data => {
+        cardsContainer.appendChild(createArticle(data));
+    })
+    jquery.forEach(data => {
+        cardsContainer.appendChild(createArticle(data));
+    })
+    node.forEach(data => {
+        cardsContainer.appendChild(createArticle(data));
+    })
+})
+   
+.catch(error => {
+    console.log(error);
+})
